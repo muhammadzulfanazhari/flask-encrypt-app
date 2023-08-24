@@ -1,0 +1,155 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} User Profile {% endblock %}
+
+<!-- Specific page CSS goes here  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+{{ moment.include_jquery() }}
+{{ moment.include_moment() }}
+
+<main class="content">
+
+    {% include 'includes/navigation.html' %}
+
+    <div class="py-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+                <li class="breadcrumb-item">
+                    <a href="{{ url_for('home.index') }}"><span class="fas fa-home"></span></a>
+                </li>
+                <li class="breadcrumb-item">Documents</li>
+            </ol>
+        </nav>
+        <div class="d-flex justify-content-between w-100 flex-wrap">
+            <div class="mb-3 mb-lg-0">
+                <h1 class="h4">Manage Documents</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-body">
+        <div class="row gutters-sm">
+
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="mb-3 mb-lg-0">
+                            <h4 class="h4">Upload Documents</h4>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" enctype="multipart/form-data">
+                            {{ form.hidden_tag() }}
+                            <div class="mb-3">
+                                <label for="first_name">Nama Document</label>
+                                {{ form.file_name(class="form-control") }}
+                            </div>
+                            <div class="mb-3">
+                                <label for="last_name">Browse Document</label>
+                                {{ form.document(class="form-control") }}
+                            </div>
+                            {{ form.submit(class="btn btn-primary") }}
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="mb-3 mb-lg-0">
+                            <h4 class="h4">List Documents</h4>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table id="documentTable" class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nama Document</th>
+                                    <th>Owner</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- documents -->
+                                {% for document in documents.items %}
+                                <tr>
+                                    <td><span class="font-weight-normal">{{ loop.index }}</span></td>
+                                    <td><span class="font-weight-normal">{{ document.file_name }}</span></td>
+                                    <td><span class="font-weight-normal">{{ document.user.first_name }} {{ document.user.last_name }}</span></td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0"
+                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <span class="icon icon-sm">
+                                                    <span class="fas fa-ellipsis-h icon-dark"></span>
+                                                </span>
+                                                <span class="sr-only">Toggle Dropdown</span>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" data-toggle="modal" data-target="#downloadDocument{{ document.id }}"><span class="fas fa-download mr-2"></span>Download</a>
+                                                <a class="dropdown-item text-danger" data-toggle="modal" data-target="#deleteDocument{{ document.id }}" href="#deleteDocument{{ document.id }}">
+                                                    <span class="fas fa-trash-alt mr-2"></span>Remove</a>
+                                            </div>
+                                           <!-- modal -->                        
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <div class="card-footer px-3 border-0 d-flex align-items-center justify-content-between">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination mb-0">
+                                    {% if documents.has_prev %}
+                                    <li class="page-item"> <a class="page-link"
+                                            href="{{ url_for('home.add_document', page=documents.prev_num, continue_flag=continue_flag) }}">Previous</a></li>
+                                    {% else %}
+                                    <li class="page-item"><a class="page-link btn disabled" href="#">Previous</a></li>
+                                    {% endif %}
+                
+                                    {% for page_num in documents.iter_pages(left_edge=3, right_edge=3) %}
+                                    {% if page_num %}
+                
+                                    {% if page_num==documents.page %}
+                                    <li class="page-item active"><a class="page-link"
+                                            href="{{ url_for('home.add_document', page=page_num, continue_flag=continue_flag) }}">{{ page_num }}</a></li>
+                                    {% else %}
+                                    <li class="page-item"><a class="page-link" href="{{ url_for('home.add_document', page=page_num, continue_flag=continue_flag) }}">{{
+                                            page_num }}</a>
+                                    </li>
+                                    {% endif %}
+                
+                                    {% else %}
+                                    <li class="page-item disabled" id="example_ellipsis"><a href="#" class="page-link">…</a></li>
+                                    {% endif %}
+                                    {% endfor %}
+                
+                                    {% if documents.has_next %}
+                                    <li class="page-item"> <a class="page-link"
+                                            href="{{ url_for('home.add_document', page=documents.next_num, continue_flag=continue_flag) }}">Next</a></li>
+                                    {% else %}
+                                    <li class="page-item"><a class="page-link btn disabled" href="#">Next</a></li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                            <div class="font-weight-bold small">Showing <b>{{ documents.items|length }}</b> out of <b>{{ documents.total }}</b>
+                                entries</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'includes/footer.html' %}
+
+</main>
+
+{% endblock content %}
+
+<!-- Specific page JS goes here  -->
+{% block javascripts %}{% endblock javascripts %}

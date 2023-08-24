@@ -1,0 +1,213 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Item {% endblock %}
+
+<!-- Specific page CSS goes here  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<main class="content">
+
+    {% include 'includes/navigation.html' %}
+
+    <div class="py-4">
+        <div class="row mb-3">
+            <div class="col-lg">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+                <li class="breadcrumb-item">
+                    <a href="{{ url_for('home.index') }}"><span class="fas fa-home"></span></a>
+                </li>
+                <li class="breadcrumb-item">Item</li>
+            </ol>
+        </nav>
+        <div class="d-flex justify-content-between w-100 flex-wrap">
+            <div class="mb-3 mb-lg-0">
+                <h1 class="h4">Tabel Barang</h1>
+            </div>
+        </div>
+        <div class="card card-body border-light shadow-sm table-wrapper table-responsive pt-0">
+            <div class="row mb-4"></div>
+            <div class="row mb-1">
+                <div class="col-lg-8 mb-1">
+                    <strong>Search For : {{ tag }} </strong>
+                </div>
+                <div class="col-lg-4 mb-1">
+                    <form action="" method="post" autocomplete="off">
+                        <div class="row">
+                            <div class="col-lg-8 mb-1">
+                                <input type="text" class="form-control" name="tag" id="tag"
+                                    placeholder="Enter keyword" value="{{ tag }}"/>
+                            </div>
+                            <div class="col-lg-4 mb-1" align="left">
+                                <input type="submit" value="Search" class="form-control btn btn-primary btn-sm">
+                            </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <table id="itemTable" class="table table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Kode Barang</th>
+                    <th>Nama Barang</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Item -->
+                {% for item in items.items %}
+                <tr>
+                    <td><span class="font-weight-normal">{{ loop.index }}</span></td>
+                    <td><span class="font-weight-normal">{{ item.item_code }}</span></td>
+                    <td><span class="font-weight-normal">{{ item.item_name }}</span></td>
+                    <td>
+                        <div class="btn-group">
+                            <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="icon icon-sm">
+                                    <span class="fas fa-ellipsis-h icon-dark"></span>
+                                </span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" data-toggle="modal" data-target="#editItem{{ item.id }}"><span class="fas fa-edit mr-2"></span>Edit</a>
+                                <a class="dropdown-item text-danger" data-toggle="modal" data-target="#deleteItem{{ item.id }}" href="#deleteItem{{ item.id }}">
+                                    <span class="fas fa-trash-alt mr-2"></span>Remove</a>
+                            </div>
+                            {% include 'partials/ItemModal.html' %}                            
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="card-footer px-3 border-0 d-flex align-items-center justify-content-between">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination mb-0">
+                    {% if items.has_prev %}
+                    <li class="page-item"> <a class="page-link"
+                            href="{{ url_for('home.item', page=items.prev_num, tag=tag, continue_flag=continue_flag) }}">Previous</a></li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link btn disabled" href="#">Previous</a></li>
+                    {% endif %}
+
+                    {% for page_num in items.iter_pages(left_edge=3, right_edge=3) %}
+                    {% if page_num %}
+
+                    {% if page_num==items.page %}
+                    <li class="page-item active"><a class="page-link"
+                            href="{{ url_for('home.item', page=page_num, tag=tag, continue_flag=continue_flag) }}">{{ page_num }}</a></li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link" href="{{ url_for('home.item', page=page_num, tag=tag, continue_flag=continue_flag) }}">{{
+                            page_num }}</a>
+                    </li>
+                    {% endif %}
+
+                    {% else %}
+                    <li class="page-item disabled" id="example_ellipsis"><a href="#" class="page-link">…</a></li>
+                    {% endif %}
+                    {% endfor %}
+
+                    {% if items.has_next %}
+                    <li class="page-item"> <a class="page-link"
+                            href="{{ url_for('home.item', page=items.next_num, tag=tag, continue_flag=continue_flag) }}">Next</a></li>
+                    {% else %}
+                    <li class="page-item"><a class="page-link btn disabled" href="#">Next</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            <div class="font-weight-bold small">Showing <b>{{ items.items|length }}</b> out of <b>{{ items.total }}</b>
+                entries</div>
+        </div>
+        <div class="row mb-5">
+            <div class="col-lg-3">
+                <button type="button" onclick="showFormAdd()" id="AddModalBtn"
+                    class="form-control btn btn-primary btn-sm">Tambah Barang</button>
+            </div>
+        </div>
+        <div class="row mb-3" id="AddItemForm">
+            <div class="col-lg">                
+                <div class="row mb-3">
+                    <h5 class="h5">Tambah Barang</h5>
+                </div>
+                <form method="POST">
+                    <div class="row mb-3 form-group">
+                        {{ form.hidden_tag() }}
+                        <div class="col-lg-2">
+                            <label>Kode Barang</label>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                <span class="input-group-text" id="basic-addon3"></span>
+                                {{ form.item_code(placeholder="Kode Barang", class="form-control") }}
+                            </div>
+                            {% for error in form.item_code.errors %}
+                            <span style="color: red;">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="row mb-3 form-group">
+                        <div class="col-lg-2">
+                            <label>Nama Barang</label>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group">
+                                <span class="input-group-text" id="basic-addon3"></span>
+                                {{ form.item_name(placeholder="Nama Barang", class="form-control") }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3 form-group">
+                        <div class="col-lg-5">
+                            <button type="button" onclick="hideFormAdd()" class="btn btn-secondary"
+                                data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" formaction="{{ url_for('home.item', continue_flag='Yes', page=items.page, tag=tag) }}">Tambah</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+</main>
+
+{% endblock content %}
+
+<!-- Specific page JS goes here  -->
+{% block javascripts %}
+
+<script>
+    function showFormAdd() {
+        document.getElementById("AddItemForm").style.visibility = "visible";
+    }
+    function hideFormAdd() {
+        document.getElementById("AddItemForm").style.visibility = "hidden";
+    }
+</script>
+
+{% if continue_flag == 'Yes' %}
+<script>
+    document.getElementById("AddItemForm").style.visibility = "visible";
+</script>
+{% else %}
+<script>
+    document.getElementById("AddItemForm").style.visibility = "hidden"
+</script>
+{% endif %}
+
+{% endblock javascripts %}

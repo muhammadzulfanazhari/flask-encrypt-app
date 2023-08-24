@@ -1,0 +1,115 @@
+{% extends "layouts/base-screen.html" %}
+
+{% block title %} Register {% endblock %}
+
+<!-- Specific page CSS goes here  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block body_class %} bg-soft {% endblock body_class %}
+
+{% block content %}
+
+<main>
+
+    <!-- Section -->
+    <section class="vh-lg-100 d-flex align-items-center">
+
+        <!-- Container -->
+        <div class="container">
+            <div class="row justify-content-center form-bg-image"
+                data-background="/static/img/illustrations/signin.svg">
+                <div class="col-12 d-flex align-items-center justify-content-center">
+                    <div
+                        class="signin-inner my-3 my-lg-0 bg-white shadow-soft border rounded border-light p-4 p-lg-5 w-100 fmxw-500">
+
+                        <div class="text-center text-md-center mb-4 mt-md-0">
+                            <h1 class="mb-0 h3">Register</h1>
+                        </div>
+
+                        <!-- Form -->
+                        <form method="POST" action="" class="mt-4">
+
+                            {{ form.hidden_tag() }}
+
+                            <div class="form-group">
+                                <!-- Username form -->
+                                <div class="form-group mb-4">
+                                    <label for="email">Username</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text" id="basic-addon3"><span
+                                                class="fas fa-user-shield"></span></span>
+                                        {{ form.username(placeholder="Username", class="form-control") }}
+                                    </div>
+                                    {% for error in form.username.errors %}
+                                    <span style="color: red;">{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                                <!-- End of username form -->
+
+                                <!-- Email form -->
+                                <div class="form-group mb-4">
+                                    <label for="email">Email</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text" id="basic-addon3"><span
+                                                class="fas fa-envelope"></span></span>
+                                        {{ form.email(placeholder="Email", class="input form-control", type="email") }}
+                                    </div>
+                                    {% for error in form.email.errors %}
+                                    <span style="color: red;">{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                                <!-- End of email form -->
+
+                                <!-- Password form -->
+                                <div class="form-group mb-4">
+                                    <label for="password">Password</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text" id="basic-addon4"><span
+                                                class="fas fa-unlock-alt"></span></span>
+                                        {{ form.password(placeholder="Password", class="form-control", type="password")
+                                        }}
+                                    </div>
+                                </div>
+                                <!-- End of password form -->
+
+                                <!-- Repeat password form -->
+                                <div class="form-group mb-4">
+                                    <label for="password">Repeat Password</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text" id="basic-addon4"><span
+                                                class="fas fa-unlock-alt"></span></span>
+                                        {{ form.repeat_password(placeholder="Repeat Password", class="form-control",
+                                        type="password")
+                                        }}
+                                    </div>
+                                </div>
+                                <!-- End of repeat password form -->
+                            </div>
+
+                            <button type="submit" name="register" class="btn btn-block btn-primary">Sign Up</button>
+
+                            <br>
+                            <p class="text-center">
+                                <a href="{{ url_for('auth.login') }}" class="text-gray-700">
+                                    <i class="fas fa-angle-left mr-2"></i> Back to Log In
+                                </a>
+                            </p>
+
+                        </form>
+                        <!-- End of form -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End of container -->
+
+    </section>
+    <!-- End of section -->
+
+</main>
+
+{% endblock content %}
+
+<!-- Specific page JS goes here  -->
+{% block javascripts %}{% endblock javascripts %}

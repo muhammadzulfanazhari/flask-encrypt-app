@@ -1,0 +1,211 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Transaction {% endblock %}
+
+<!-- Specific page CSS goes here  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<main class="content">
+
+    {% include 'includes/navigation.html' %}
+
+    <div class="py-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+                <li class="breadcrumb-item">
+                    <a href="{{ url_for('home.index') }}"><span class="fas fa-home"></span></a>
+                </li>
+                <li class="breadcrumb-item">Transaction</li>
+            </ol>
+        </nav>
+        <div class="d-flex justify-content-between w-100 flex-wrap">
+            <div class="mb-3 mb-lg-0">
+                <h1 class="h4">Transaction Tables</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="row mb-4">
+                <div class="col-lg-4 mb-4">
+                    <div class="card bg-white border-light shadow-sm mb-4">
+                        <div class="card-body">
+                            <form id="form1">
+                                <div class=mb-3>
+                                    <label class="my-1 mr-2 h4">Input Item</label>
+                                </div>
+                                <div class=mb-3>
+                                    <label class="my-1 mr-2">Nama Item</label>
+                                    <select class="form-select" name="ItemName" id="ItemName" aria-label="Default select example" required> 
+                                        <option value="1 AG0101 Baju">AG0101 Baju</option>
+                                        <option value="2 AG0102 Celana">AG0102 Celana</option>
+                                        <option value="3 AG0102 Celana">AG0103 Jilbab</option>
+                                    </select>
+                                </div>
+                                <div class=mb-3>
+                                    <label class="my-1 mr-2">Kuantitas</label>
+                                    <input type="number" name="quantity" id="quantity" min="1" class="form-control" required>
+                                </div>
+                                <div class=mb-3>
+                                    <label class="my-1 mr-2">Harga</label>
+                                    <input type="number" name="price" id="price" min="0" step="500" class="form-control" required>
+                                </div>
+                                <div class=mb-3>
+                                    <button class="btn btn-primary">Tambah</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8 mb-4">
+                    <div class="card bg-white border-light shadow-sm mb-4">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <div class="table-responsive">
+                                    <table class="table table-centered table-nowrap mb-0 rounded">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th class="border-0">Kode Item</th>
+                                                <th class="border-0">Nama Item</th>
+                                                <th class="border-0">Kuantitas</th>
+                                                <th class="border-0">Harga</th>
+                                                <th class="border-0">Total</th>
+                                                <th class="border-0">Hapus</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <span class="font-weight-normal">AG0101</span>
+                                                </td>
+                                                <td><span class="font-weight-normal">Baju gamis</span></td>
+                                                <td><span class="font-weight-normal">10</span></td>
+                                                <td><span class="font-weight-normal">Rp. 90.000</span></td>
+                                                <td><span class="font-weight-normal">Rp. 900.000</span></td>
+                                                <td>
+                                                    <a class="dropdown-item text-danger" href="#"><span
+                                                            class="fas fa-trash-alt mr-2"></span>Hapus</a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <span class="font-weight-normal">AG0102</span>
+                                                </td>
+                                                <td><span class="font-weight-normal">Cardigan</span></td>
+                                                <td><span class="font-weight-normal">7</span></td>
+                                                <td><span class="font-weight-normal">Rp. 90.000</span></td>
+                                                <td><span class="font-weight-normal">Rp. 630.000</span></td>
+                                                <td>
+                                                    <a class="dropdown-item text-danger" href="#"><span
+                                                            class="fas fa-trash-alt mr-2"></span>Hapus</a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <fieldset>
+                                            <legend class="h6">Metode Pembayaran</legend>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="cashCheck"
+                                                    id="cashCheck" value="option1" checked>
+                                                <label class="form-check-label">
+                                                    Cash
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="transferCheck"
+                                                    id="transferCheck" value="option2">
+                                                <label class="form-check-label">
+                                                    Transfer
+                                                </label>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    <div class=mb-3>
+                                        <label class="my-1 mr-2"><b>Total: </b></label>
+                                    </div>
+                                    <div class=mb-3>
+                                        <label class="my-1 mr-2">Bank</label>
+                                        <select class="form-select" id="bank" aria-label="Default select example">
+                                            <option selected>Pilih Bank</option>
+                                            <option value="1">BNI</option>
+                                            <option value="2">BCA</option>
+                                            <option value="3">Mandiri</option>
+                                        </select>
+                                    </div>
+                                    <div class=mb-3>
+                                        <label class="my-1 mr-2">Nomor Referensi</label>
+                                        <input type="text" id="referenceCode" class="form-control">
+                                    </div>
+                                    <div class=mb-3>
+                                        <button class="btn btn-primary" type="button">Bayar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'includes/footer.html' %}
+
+</main>
+
+{% endblock content %}
+
+<!-- Specific page JS goes here  -->
+{% block javascripts %}
+<script>
+    const formEl = document.querySelector("#form1");
+    const tbodyEl = document.querySelector("tbody");
+    const tableEl = document.querySelector("table");
+    function onAddItem(e) {
+        e.preventDefault();
+        const ItemName = document.getElementById("ItemName").value;
+        const quantity = document.getElementById("quantity").value;
+        const price = document.getElementById("price").value;
+        var total = quantity*price;
+
+        //split ItemName
+        var new_ItemName = ItemName.split(" ");
+
+        tbodyEl.innerHTML += `
+                <tr>
+                    <td><span class="font-weight-normal">${new_ItemName[1]}</span></td>
+                    <td><span class="font-weight-normal">${new_ItemName[2]}</span></td>
+                    <td><span class="font-weight-normal">${quantity}</span></td>
+                    <td><span class="font-weight-normal">${price}</span></td>
+                    <td><span class="font-weight-normal">${total}</span></td>
+                    <td>
+                        <a class="deleteBtn dropdown-item text-danger">
+                            <span class="fas fa-trash-alt mr-2">
+                            </span>Hapus
+                        </a>
+                    </td>
+                </tr>
+            `;
+    }
+
+    function onDeleteRow(e) {
+        if (!e.target.classList.contains("deleteBtn")) {
+            return;
+        }
+
+        const btn = e.target;
+        btn.closest("tr").remove();
+    }
+
+    formEl.addEventListener("submit", onAddItem);
+    tableEl.addEventListener("click", onDeleteRow);
+
+</script>
+{% endblock javascripts%}

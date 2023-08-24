@@ -1,0 +1,119 @@
+<!-- Delete Item Modal -->
+<div class="modal fade" id="deleteItem{{ item.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Delete Record?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <p>Apakah anda yakin?</p>
+            <p>Datat yang dihapus tidak dapat dikembalikan.</p>          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <form action="{{ url_for('home.delete_item', id=item.id) }}" method="POST">
+            <input class="btn btn-danger" type="submit" value="Delete">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Edit Modal -->
+<div class="modal fade" data-backdrop="static" id="editItem{{ item.id }}" tabindex="-1" role="dialog" aria-labelledby="editItem" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">                
+              <h4 class="modal-title">Edit Data Barang</h4>
+              <button type="button" class="btn-close ml-auto" data-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form method="POST" id="inputForm">
+              <div class="modal-body">
+                  {{ form.hidden_tag() }}
+                  <div class="form-group mb-4">
+                      <label>Kode Barang</label>
+                      <div class="input-group">
+                          <span class="input-group-text" id="basic-addon3"></span>
+                          {{ form.item_code(value=item.item_code, class="form-control") }}
+                      </div> 
+                      {% for error in form.item_code.errors %}
+                      <span style="color: red;">{{ error }}</span>
+                     {% endfor %} 
+                  </div>
+                  <div class="form-group mb-4">
+                      <label>Nama Barang</label>
+                      <div class="input-group">
+                          <span class="input-group-text" id="basic-addon3"></span>
+                          {{ form.item_name(value=item.item_name, class="form-control") }}
+                      </div>  
+                  </div>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary" formaction="{{ url_for('home.update_item', id=item.id) }}">Edit</button>                
+              </div>
+          </form>            
+      </div>
+  </div>
+</div>
+
+
+<div class="modal fade" data-backdrop="static" id="AddItem" tabindex="-1" role="dialog" aria-labelledby="AddItem" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">                
+                <h4 class="modal-title">Tambah Data Barang</h4>
+                <button type="button" class="btn-close ml-auto" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" id="inputForm">
+                <div class="modal-body">
+                    {{ form.hidden_tag() }}
+                    <div class="form-group mb-4">
+                        <label>Kode Barang</label>
+                        <div class="input-group">
+                            <span class="input-group-text" id="basic-addon3"></span>
+                            {{ form.item_code(placeholder="Kode Barang", class="form-control") }}
+                        </div> 
+                        {% for error in form.item_code.errors %}
+                        <span style="color: red;">{{ error }}</span>
+                       {% endfor %} 
+                    </div>
+                    <div class="form-group mb-4">
+                        <label>Nama Barang</label>
+                        <div class="input-group">
+                            <span class="input-group-text" id="basic-addon3"></span>
+                            {{ form.item_name(placeholder="Nama Barang", class="form-control") }}
+                        </div>  
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    {% for message in get_flashed_messages() %}
+                    <div class="alert-error text-center">
+                        <span style="color: red;">{{ message }}</span>
+                    </div>
+                    {% endfor %}
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" onclick="document.getElementById('AddItem').style.display" id="addBtn" class="btn btn-primary">Tambah</button>                
+                </div>
+            </form>            
+        </div>
+    </div>
+</div>
+
+<script>
+    
+    //document.getElementById("AddItem").style.visibility = "visible";
+    //document.getElementById("addBtn").onclick = function(){
+      //click me function!
+      //event.preventDefault();
+      //return document.getElementById("AddItem2").showModal();
+    //}
+    // document.addEventListener("submit", myFunction);
+
+    // function myFunction() {
+    //     document.getElementById("AddItem").innerHTML;
+    // }   
+</script>

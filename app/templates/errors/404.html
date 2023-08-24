@@ -1,0 +1,32 @@
+{% extends "layouts/base-screen.html" %}
+
+{% block title %} 404 Error {% endblock %}
+
+<!-- Specific page CSS goes here  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<main>
+    <section class="vh-100 d-flex align-items-center justify-content-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center d-flex align-items-center justify-content-center">
+                    <div>
+                        <img class="img-fluid w-75" src="/static/img/illustrations/404.svg" alt="404 not found">
+                        <h1 class="mt-5"><span class="font-weight-bolder text-primary">Oops!</span> Page not found.</h1>
+                        <p class="lead my-4">Looks like you followed a bad link. If you think this is a
+                            problem with us, please tell us.</p>
+                        <a class="btn btn-primary animate-hover" href="{{ url_for('home.index') }}"><i
+                                class="fas fa-chevron-left mr-3 pl-2 animate-left-3"></i>Back to Home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+{% endblock content %}
+
+<!-- Specific page JS goes here  -->
+{% block javascripts %}{% endblock javascripts %}

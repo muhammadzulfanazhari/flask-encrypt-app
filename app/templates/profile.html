@@ -1,0 +1,118 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} User Profile {% endblock %}
+
+<!-- Specific page CSS goes here  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+{{ moment.include_jquery() }}
+{{ moment.include_moment() }}
+
+<main class="content">
+
+    {% include 'includes/navigation.html' %}
+
+    <div class="py-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+                <li class="breadcrumb-item">
+                    <a href="{{ url_for('home.index') }}"><span class="fas fa-home"></span></a>
+                </li>
+                <li class="breadcrumb-item">Profile</li>
+                <li class="breadcrumb-item">{{ user.username }}</li>
+            </ol>
+        </nav>
+        <div class="d-flex justify-content-between w-100 flex-wrap">
+            <div class="mb-3 mb-lg-0">
+                <h1 class="h4">User Profile</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-body">
+        <div class="row gutters-sm">
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex flex-column align-items-center text-center">
+                            <img src="{{ user.avatar(150) }}" alt="User Profile" class="rounded-circle" width="150">
+                            <div class="mt-3">
+                                <h4>{{ user.username }}</h4>
+                                <small class="text-muted font-size-sm">Last seen {{
+                                    moment(user.last_seen).format('h:mm:ss A')
+                                    }}</small>
+                            </div>
+                            <a {% if request.path=='/edit-profile/' + current_user.username %} class="mt-3" {% endif %} href="{{ url_for('home.edit_profile', username=current_user.username) }}">
+                                <span class="fas fa-edit mr-1"></span> Edit Profile</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="col-sm-3">
+                                <h6 class="mb-2 text-secondary">Nama Depan</h6>
+                            </div>
+                            <div class="col-sm-9 text-primary">
+                                {{ user.first_name }}
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-sm-3">
+                                <h6 class="mb-2 text-secondary">Nama Belakang</h6>
+                            </div>
+                            <div class="col-sm-9 text-primary">
+                                {{ user.last_name }}
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-sm-3">
+                                <h6 class="mb-2 text-secondary">Username</h6>
+                            </div>
+                            <div class="col-sm-9 text-primary">
+                                {{ user.username }}
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-sm-3">
+                                <h6 class="mb-2 text-secondary">Email</h6>
+                            </div>
+                            <div class="col-sm-9 text-primary">
+                                {{ user.email }}
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-sm-3">
+                                <h6 class="mb-2 text-secondary">Pekerjaan</h6>
+                            </div>
+                            <div class="col-sm-9 text-primary">
+                                {{ user.position }}
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-sm-3">
+                                <h6 class="mb-2 text-secondary">Program Studi</h6>
+                            </div>
+                            <div class="col-sm-9 text-primary">
+                                {{ user.department }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'includes/footer.html' %}
+
+</main>
+
+{% endblock content %}
+
+<!-- Specific page JS goes here  -->
+{% block javascripts %}{% endblock javascripts %}
