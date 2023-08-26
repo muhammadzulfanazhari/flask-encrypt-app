@@ -51,6 +51,10 @@
                                 <label for="last_name">Browse Document</label>
                                 {{ form.document(class="form-control") }}
                             </div>
+                            <div class="mb-3">
+                                <label for="key">Key</label>
+                                {{ form.encryption_key(class="form-control") }}
+                            </div>
                             {{ form.submit(class="btn btn-primary") }}
                         </form>
                     </div>
@@ -90,11 +94,13 @@
                                                 <span class="sr-only">Toggle Dropdown</span>
                                             </button>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" data-toggle="modal" data-target="#downloadDocument{{ document.id }}"><span class="fas fa-download mr-2"></span>Download</a>
+                                                <!--<a class="dropdown-item" data-toggle="modal" data-target="#downloadDocument"><span class="fas fa-download mr-2"></span>Download</a>-->
+                                                <a class="dropdown-item" href="{{ url_for('home.download_document', document_id=document.id) }}">
+                                                    <span class="fas fa-download mr-2"></span>Download</a>
                                                 <a class="dropdown-item text-danger" data-toggle="modal" data-target="#deleteDocument{{ document.id }}" href="#deleteDocument{{ document.id }}">
                                                     <span class="fas fa-trash-alt mr-2"></span>Remove</a>
                                             </div>
-                                           <!-- modal -->                        
+                                            {% include 'partials/documentModal.html' %}                        
                                         </div>
                                     </td>
                                 </tr>

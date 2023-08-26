@@ -17,6 +17,7 @@ class UpdateUserForm(FlaskForm):
 class DocumentForm(FlaskForm):
     file_name = StringField('File Name', validators=[DataRequired()])
     document = FileField('Document', validators=[DataRequired()])
+    encryption_key = PasswordField('Encryption Key', validators=[DataRequired()])
     submit = SubmitField('Upload Document')
 
         
