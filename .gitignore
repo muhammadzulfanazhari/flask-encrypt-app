@@ -3,3 +3,7 @@ __pycache__
 db.sqlite3
 migrations
 app/documents/*
+encrypt.ipynb
+data
+data_decrypt
+data_original

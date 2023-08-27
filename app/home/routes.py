@@ -58,8 +58,6 @@ def add_document(page, continue_flag):
     continue_flag = continue_flag
     pages = 20
     documents = Document.query.filter().paginate(page, per_page=pages, error_out=False)
-    for doc in documents.items:
-        print(doc)
         
     form = DocumentForm()
 
@@ -68,12 +66,23 @@ def add_document(page, continue_flag):
         filename = secure_filename(document_file.filename)
         path = os.path.join(UPLOAD_PATH, filename)
         
-        print(form.encryption_key.data)
-        print(f'the type is: {type(form.encryption_key.data)}')
+        # test if data type is valid
+        key = "1234567890123456"
+        if (form.encryption_key.data == key):
+            print(f'the type is: {True}')
+        else:
+            print(f'the type is: {False}')
         
-        encryption_key = form.encryption_key.data.encode('utf-8')
-        print(f'the type is: {type(encryption_key)}')
+        if (form.encryption_key.data.encode('utf-8') == key.encode('utf-8')):
+             print(f'encode: {True}')
+        else:
+            print(f'the type is: {False}')
+            
+        # encryption_key = form.encryption_key.data.encode('utf-8')
+        encryption_key = key.encode('utf-8')
+        
         cipher = AES.new(encryption_key, AES.MODE_EAX)
+        print(document_file.read())
         
         with open(path, 'wb') as file:
             file.write(cipher.encrypt(document_file.read()))
@@ -94,12 +103,7 @@ def add_document(page, continue_flag):
 @login_required
 def download_document(document_id):
     document = Document.query.get_or_404(document_id)
-    # return send_file(document.path, as_attachment=True)
-    
-    # Read the encrypted content from the file
-    with open(document.path, 'rb') as file:
-        encrypted_content = file.read()  
-    
+
     # Extract the original filename and extension
     original_filename = os.path.basename(document.path)
     
@@ -112,7 +116,7 @@ def download_document(document_id):
 
     # Decrypt the content using the user-provided encryption key
     key = "1234567890123456"  # Replace with your key retrieval logic
-    encryption_key = key.encode('utf-8')
+    encryption_key = key.encode('utf-8')  
     cipher = AES.new(encryption_key, AES.MODE_EAX)
     decrypted_content = cipher.decrypt(encrypted_content)
 
