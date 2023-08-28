@@ -7,7 +7,7 @@ from app.models import User, Document
 from sqlalchemy import or_
 from app.home.forms import UpdateUserForm, DocumentForm
 from werkzeug.utils import secure_filename
-from app.utils import UPLOAD_PATH
+from app.utils import UPLOAD_PATH, encrypt_file, decrypt_file
 from Crypto.Cipher import AES
 
 
@@ -63,30 +63,13 @@ def add_document(page, continue_flag):
 
     if (form.validate_on_submit()):
         document_file = form.document.data
-        filename = secure_filename(document_file.filename)
+        filename = secure_filename(document_file.filename) + ".enc"
         path = os.path.join(UPLOAD_PATH, filename)
         
-        # test if data type is valid
-        key = "1234567890123456"
-        if (form.encryption_key.data == key):
-            print(f'the type is: {True}')
-        else:
-            print(f'the type is: {False}')
+        encryption_key = form.encryption_key.data
         
-        if (form.encryption_key.data.encode('utf-8') == key.encode('utf-8')):
-             print(f'encode: {True}')
-        else:
-            print(f'the type is: {False}')
-            
-        # encryption_key = form.encryption_key.data.encode('utf-8')
-        encryption_key = key.encode('utf-8')
+        encrypt_file(encryption_key, document_file.read(), path)
         
-        cipher = AES.new(encryption_key, AES.MODE_EAX)
-        print(document_file.read())
-        
-        with open(path, 'wb') as file:
-            file.write(cipher.encrypt(document_file.read()))
-
         # Create a new Document instance and save it to the database
         document = Document(file_name=form.file_name.data, path=path, user_id=current_user.id,
                             created_by=current_user.id, updated_by=current_user.id)
@@ -109,18 +92,14 @@ def download_document(document_id):
     
     # Create a temporary file with the original filename and extension
     temp_file_path = os.path.join(tempfile.gettempdir(), original_filename)
-    
-    # Read the encrypted content from the file
-    with open(document.path, 'rb') as file:
-        encrypted_content = file.read()
+    temp_file_path = temp_file_path.replace(".enc", "")
 
     # Decrypt the content using the user-provided encryption key
-    key = "1234567890123456"  # Replace with your key retrieval logic
-    encryption_key = key.encode('utf-8')  
-    cipher = AES.new(encryption_key, AES.MODE_EAX)
-    decrypted_content = cipher.decrypt(encrypted_content)
+    decryption_key = request.form.get('decryption_key')
+    
+    decrypted_content = decrypt_file(decryption_key, document.path)
 
-    # Write the decrypted content to the temporary file
+    # # Write the decrypted content to the temporary file
     with open(temp_file_path, 'wb') as temp_file:
         temp_file.write(decrypted_content)
     

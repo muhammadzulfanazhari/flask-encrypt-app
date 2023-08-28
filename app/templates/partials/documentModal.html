@@ -22,3 +22,28 @@
     </div>
   </div>
 
+<!-- Download Document Modal-->
+<div class="modal fade" id="downloadDocument{{ document.id }}" tabindex="-1" role="dialog" aria-labelledby="downloadModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="downloadModalLabel">Download Document - {{ document.file_name }}</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <form id="downloadForm" action="{{ url_for('home.download_document', document_id=document.id) }}" method="POST">
+                  <div class="form-group">
+                      <label for="decryption_key">Decryption Key:</label>
+                      <input type="password" class="form-control" name="decryption_key" minlength="16" maxlength="16" required>
+                      <small class="form-text text-muted">Enter a 16-character decryption key.</small>
+                  </div>
+                  <button type="submit" class="btn btn-primary" id="downloadButton">Download</button>
+              </form>
+          </div>
+      </div>
+  </div>
+</div>
+
+

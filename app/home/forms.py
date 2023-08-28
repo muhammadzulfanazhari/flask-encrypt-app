@@ -20,24 +20,6 @@ class DocumentForm(FlaskForm):
     encryption_key = PasswordField('Encryption Key', validators=[DataRequired()])
     submit = SubmitField('Upload Document')
 
-        
-        
-# class RegisterItemForm(FlaskForm):
-#     item_code = StringField('Kode Barang', validators=[DataRequired()])
-#     item_name = StringField('Nama barang', validators=[DataRequired()])
-#     submit = SubmitField('Tambah')
-
-#     def validate_item_code(self, item_code):
-#         item_code = Item.query.filter_by(item_code=item_code.data).first()
-#         if item_code is not None:
-#             raise ValidationError('Kode barang sudah ada.')
-
-# class UpdateItemForm(FlaskForm):
-#     item_code = StringField('Kode Barang', validators=[DataRequired()])
-#     item_name = StringField('Nama barang', validators=[DataRequired()])
-#     submit = SubmitField('Edit')
-
-#     def validate_item_code(self, item_code):
-#         item_code = Item.query.filter_by(item_code=item_code.data).first()
-#         if item_code is not None:
-#             raise ValidationError()
+    def validate_encryption_key(form, field):
+        if len(field.data) != 16:
+            raise ValidationError('Encryption key must be 16 characters long.')
