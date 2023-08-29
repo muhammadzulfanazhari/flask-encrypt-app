@@ -97,12 +97,16 @@ def download_document(document_id):
     # Decrypt the content using the user-provided encryption key
     decryption_key = request.form.get('decryption_key')
     
-    decrypted_content = decrypt_file(decryption_key, document.path)
+    decrypted_content, error_status = decrypt_file(decryption_key, document.path)
 
-    # # Write the decrypted content to the temporary file
+    if error_status == True:
+        flash('Cannot decrypt selected document', 'error')
+        return redirect(url_for('home.add_document', page=1, continue_flag="No"))
+    
+    # Write the decrypted content to the temporary file
     with open(temp_file_path, 'wb') as temp_file:
         temp_file.write(decrypted_content)
-    
+        
     # Send the temporary file as an attachment
     return send_file(temp_file_path, as_attachment=True)
 
