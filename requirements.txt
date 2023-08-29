@@ -39,7 +39,6 @@ psycopg2==2.9.7
 ptyprocess==0.7.0
 pure-eval==0.2.2
 pycodestyle==2.6.0
-pycrypto==2.6.1
 pycryptodome==3.18.0
 Pygments==2.16.1
 python-dateutil==2.8.2
