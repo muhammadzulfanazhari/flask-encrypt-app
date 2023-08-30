@@ -1,4 +1,5 @@
 import os, tempfile
+import time
 from flask import render_template, request, redirect, url_for, flash, send_file
 from flask_login import login_required, current_user
 from app.home import blueprint
@@ -8,7 +9,6 @@ from sqlalchemy import or_
 from app.home.forms import UpdateUserForm, DocumentForm
 from werkzeug.utils import secure_filename
 from app.utils import UPLOAD_PATH, encrypt_file, decrypt_file
-from Crypto.Cipher import AES
 
 
 @blueprint.route('/')
@@ -62,6 +62,7 @@ def add_document(page, continue_flag):
     form = DocumentForm()
 
     if (form.validate_on_submit()):
+        start_time = time.time()  # Record start time
         document_file = form.document.data
         filename = secure_filename(document_file.filename) + ".enc"
         path = os.path.join(UPLOAD_PATH, filename)
@@ -75,8 +76,12 @@ def add_document(page, continue_flag):
                             created_by=current_user.id, updated_by=current_user.id)
         db.session.add(document)
         db.session.commit()
+        
+        end_time = time.time()  # Record end time
+        processing_time = end_time - start_time
 
-        flash('Document uploaded and encrypted successfully', 'success')
+        flash(f'Document uploaded and encrypted successfully', 'success')
+        print(f'Log_info: Document uploaded and encrypted successfully. Time taken: {processing_time:.4f} seconds')
         return redirect(url_for('home.add_document', page=page, continue_flag=continue_flag))
 
     return render_template('add_document.html', user=user, form=form, documents=documents, continue_flag=continue_flag, title="Documents")
@@ -85,6 +90,7 @@ def add_document(page, continue_flag):
 @blueprint.route('/download/<int:document_id>', methods=['GET', 'POST'])
 @login_required
 def download_document(document_id):
+    start_time = time.time()  # Record start time
     document = Document.query.get_or_404(document_id)
 
     # Extract the original filename and extension
@@ -106,10 +112,14 @@ def download_document(document_id):
     # Write the decrypted content to the temporary file
     with open(temp_file_path, 'wb') as temp_file:
         temp_file.write(decrypted_content)
-        
+    
+    end_time = time.time()  # Record end time
+    processing_time = end_time - start_time
+    
+    print(f'Log_info: Document downloaded and decrypted successfully. Time taken: {processing_time:.4f} seconds')
+    
     # Send the temporary file as an attachment
     return send_file(temp_file_path, as_attachment=True)
-
 
 @blueprint.route('/delete_document/<int:document_id>', methods=['GET', 'POST'])
 @login_required
