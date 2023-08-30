@@ -134,5 +134,5 @@ def delete_document(document_id):
     db.session.delete(document)
     db.session.commit()
 
-    flash('Document deleted successfully', 'success')
+    flash('Document is deleted successfully', 'success')
     return redirect(url_for('home.add_document', page=1, continue_flag="No"))
