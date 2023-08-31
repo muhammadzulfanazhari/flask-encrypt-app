@@ -81,7 +81,9 @@ def add_document(page, continue_flag):
         processing_time = end_time - start_time
 
         flash(f'Document uploaded and encrypted successfully', 'success')
-        print(f'Log_info: Document uploaded and encrypted successfully. Time taken: {processing_time:.4f} seconds')
+        print(f"""LOG_INFO: Document uploaded and encrypted. 
+              FIlename: {path}
+              Time taken: {processing_time:.4f} seconds""")
         return redirect(url_for('home.add_document', page=page, continue_flag=continue_flag))
 
     return render_template('add_document.html', user=user, form=form, documents=documents, continue_flag=continue_flag, title="Documents")
@@ -116,7 +118,9 @@ def download_document(document_id):
     end_time = time.time()  # Record end time
     processing_time = end_time - start_time
     
-    print(f'Log_info: Document downloaded and decrypted successfully. Time taken: {processing_time:.4f} seconds')
+    print(f"""LOG_INFO: Document downloaded and decrypted. 
+          Filename: {temp_file_path}
+          Time taken: {processing_time:.4f} seconds""")
     
     # Send the temporary file as an attachment
     return send_file(temp_file_path, as_attachment=True)
