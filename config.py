@@ -23,7 +23,8 @@ class DevelopmentConfig(Config):
     DEBUG = True
     # SQLALCHEMY_DATABASE_URI = 'sqlite:///' + \
     #     path.join(basedir, 'db.sqlite3')
-    SQLALCHEMY_DATABASE_URI = 'postgres://fhzdbzskqfjbih:acf38aa23207c262d14058c034099c98a3508b79d5c0867e79b6749f023fd15a@ec2-44-213-228-107.compute-1.amazonaws.com:5432/depdancdg96nmn'
+    # SQLALCHEMY_DATABASE_URI = 'postgres://fhzdbzskqfjbih:acf38aa23207c262d14058c034099c98a3508b79d5c0867e79b6749f023fd15a@ec2-44-213-228-107.compute-1.amazonaws.com:5432/depdancdg96nmn'
+    SQLALCHEMY_DATABASE_URI = 'postgres://kasbkgkvspcknq:e4cf7fc9eefc134c78865ee38f505dcbba0c6b20223ebce468db7dd0e70d20f6@ec2-23-20-33-236.compute-1.amazonaws.com:5432/ddc2hdn722c0hk'
 
 class ProductionConfig(Config):
     """Production configuration."""
